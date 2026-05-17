@@ -1,0 +1,56 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+
+# Git
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Streamlit cache
+.streamlit/
+
+# Database files
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# Temporary files
+temp/
+tmp/
+
+# Uploaded PDFs
+uploads/
+
+# FAISS indexes if generated locally
+faiss_index/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Build files
+dist/
+build/
+
+# Docker
+Dockerfile
+.dockerignore

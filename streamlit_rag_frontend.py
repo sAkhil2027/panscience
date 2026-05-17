@@ -52,7 +52,14 @@ add_thread(st.session_state["thread_id"])
 thread_key = str(st.session_state["thread_id"])
 thread_docs = st.session_state["ingested_docs"].setdefault(thread_key, {})
 #threads = st.session_state["chat_threads"][::-1]
-threads = retrieve_all_threads()[::-1]
+# threads = retrieve_all_threads()[::-1]
+threads = retrieve_all_threads()
+
+if threads:
+    threads = threads[::-1]
+else:
+    threads = []
+
 selected_thread = None
 
 # ============================ Sidebar ============================
@@ -63,14 +70,30 @@ if st.sidebar.button("New Chat", use_container_width=True):
     reset_chat()
     st.rerun()
 
-if thread_docs:
+# if thread_docs:
+#     latest_doc = list(thread_docs.values())[-1]
+#     st.sidebar.success(
+#         f"Using `{latest_doc.get('filename')}` "
+#         f"({latest_doc.get('chunks')} chunks from {latest_doc.get('documents')} pages)"
+#     )
+# else:
+#     st.sidebar.info("No PDF indexed yet.")
+
+
+if thread_docs and len(thread_docs.values()) > 0:
+
     latest_doc = list(thread_docs.values())[-1]
+
     st.sidebar.success(
         f"Using `{latest_doc.get('filename')}` "
         f"({latest_doc.get('chunks')} chunks from {latest_doc.get('documents')} pages)"
     )
+
 else:
     st.sidebar.info("No PDF indexed yet.")
+
+
+
 
 uploaded_pdf = st.sidebar.file_uploader("Upload a PDF for this chat", type=["pdf"])
 if uploaded_pdf:
@@ -86,47 +109,6 @@ if uploaded_pdf:
             thread_docs[uploaded_pdf.name] = summary
             status_box.update(label="✅ PDF indexed", state="complete", expanded=False)
 
-# st.sidebar.subheader("Past conversations")
-# if not threads:
-#     st.sidebar.write("No past conversations yet.")
-# else:
-#     # for thread_id in threads:
-#     #     if st.sidebar.button(str(thread_id), key=f"side-thread-{thread_id}"):
-#     #         selected_thread = thread_id
-#     for thread_id in threads:
-#         col1, col2, col3 = st.sidebar.columns([4, 1, 1])
-
-#     # Open thread
-#         with col1:
-#             if st.button(str(thread_id), key=f"open-{thread_id}"):
-#                 selected_thread = thread_id
-
-#     # Soft delete (optional)
-#         with col2:
-#             if st.button("🗑️", key=f"delete-{thread_id}"):
-#                 st.session_state["chat_threads"].remove(thread_id)
-#                 st.session_state["ingested_docs"].pop(str(thread_id), None)
-#                 st.rerun()
-
-#     # 🔥 Permanent delete
-#         with col3:
-#             if st.button("❌", key=f"perma-delete-{thread_id}"):
-
-#             # Delete from database
-#                 delete_thread_permanently(str(thread_id))
-
-#             # Remove from session
-#             if thread_id in st.session_state["chat_threads"]:
-#                 st.session_state["chat_threads"].remove(thread_id)
-
-#             st.session_state["ingested_docs"].pop(str(thread_id), None)
-
-#             # If current thread → reset
-#             if str(thread_id) == thread_key:
-#                 reset_chat()
-
-#             st.success("Conversation permanently deleted.")
-#             st.rerun()
 
 
 
@@ -233,14 +215,37 @@ if user_input:
 
 st.divider()
 
+# if selected_thread:
+#     st.session_state["thread_id"] = selected_thread
+#     messages = load_conversation(selected_thread)
+
+#     temp_messages = []
+#     for msg in messages:
+#         role = "user" if isinstance(msg, HumanMessage) else "assistant"
+#         temp_messages.append({"role": role, "content": msg.content})
+
+
+
 if selected_thread:
+
     st.session_state["thread_id"] = selected_thread
+
     messages = load_conversation(selected_thread)
 
+    if messages is None:
+        messages = []
+
     temp_messages = []
+
     for msg in messages:
+
         role = "user" if isinstance(msg, HumanMessage) else "assistant"
-        temp_messages.append({"role": role, "content": msg.content})
+
+        temp_messages.append({
+            "role": role,
+            "content": getattr(msg, "content", "")
+        })
+        
     st.session_state["message_history"] = temp_messages
     st.session_state["ingested_docs"].setdefault(str(selected_thread), {})
     st.rerun()

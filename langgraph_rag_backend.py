@@ -29,7 +29,7 @@ load_dotenv()
 # embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 llm = ChatOpenAI(
-    model="meta-llama/llama-3-8b-instruct",
+    model="openai/gpt-4o-mini",
     openai_api_key=os.getenv("OPENROUTER_API_KEY"),
     openai_api_base="https://openrouter.ai/api/v1",
     temperature=0.3,

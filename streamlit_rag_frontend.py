@@ -12,7 +12,7 @@ from langgraph_rag_backend import (
 )
 
 
-# =========================== Utilities ===========================streamlit run streamlit_rag_frontend.py
+# =========================== Utilities ===========================
 def generate_thread_id():
     return uuid.uuid4()
 
@@ -51,8 +51,6 @@ add_thread(st.session_state["thread_id"])
 
 thread_key = str(st.session_state["thread_id"])
 thread_docs = st.session_state["ingested_docs"].setdefault(thread_key, {})
-#threads = st.session_state["chat_threads"][::-1]
-# threads = retrieve_all_threads()[::-1]
 threads = retrieve_all_threads()
 
 if threads:
@@ -130,16 +128,11 @@ else:
         with col2:
                 if st.button("❌", key=f"delete-{thread_id}"):
 
-        # 1️⃣ Delete from DB
                     delete_thread_permanently(str(thread_id))
 
-        # 2️⃣ Reload threads from database
-                    #st.session_state["chat_threads"] = retrieve_all_threads()
-
-        # 3️⃣ Remove associated PDF metadata
                     st.session_state["ingested_docs"].pop(str(thread_id), None)
 
-        # 4️⃣ If current thread deleted → reset
+        
                     if str(thread_id) == thread_key:
                         reset_chat()
 
@@ -214,15 +207,6 @@ if user_input:
         )
 
 st.divider()
-
-# if selected_thread:
-#     st.session_state["thread_id"] = selected_thread
-#     messages = load_conversation(selected_thread)
-
-#     temp_messages = []
-#     for msg in messages:
-#         role = "user" if isinstance(msg, HumanMessage) else "assistant"
-#         temp_messages.append({"role": role, "content": msg.content})
 
 
 

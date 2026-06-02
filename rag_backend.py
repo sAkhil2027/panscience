@@ -13,7 +13,7 @@ from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_community.vectorstores import FAISS
 from langchain_core.messages import BaseMessage, SystemMessage
 from langchain_core.tools import tool
-from langchain_openai import ChatOpenAI #OpenAIEmbeddings
+from langchain_openai import ChatOpenAI 
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import START, StateGraph
 from langgraph.graph.message import add_messages
@@ -34,8 +34,8 @@ llm = ChatOpenAI(
     openai_api_base="https://openrouter.ai/api/v1",
     temperature=0.3,
     default_headers={
-        "HTTP-Referer": "http://localhost:8501",  # your app URL   streamlit run streamlit_rag_frontend.py
-        "X-Title": "My Chatbot"  # any name you want
+        "HTTP-Referer": "http://localhost:8501", 
+        "X-Title": "My Chatbot" 
     }
 )
 
@@ -100,7 +100,6 @@ def ingest_pdf(file_bytes: bytes, thread_id: str, filename: Optional[str] = None
             "chunks": len(chunks),
         }
     finally:
-        # The FAISS store keeps copies of the text, so the temp file is safe to remove.
         try:
             os.remove(temp_path)
         except OSError:
@@ -247,13 +246,7 @@ def retrieve_all_threads():
     return list(all_threads)
 
 
-# def delete_thread(thread_id: str):
 
-#     # Access same DB used in chatbot
-#     checkpointer = chatbot.checkpointer
-    
-#     # Delete all checkpoints for this thread
-#     checkpointer.delete_thread(thread_id)
 
 
 import sqlite3
@@ -261,16 +254,16 @@ import sqlite3
 def delete_thread_permanently(thread_id: str):
     checkpointer = chatbot.checkpointer
 
-    # Access sqlite database path
-    db_path = "chatbot.db"  # get DB file path
+   
+    db_path = "chatbot.db"  
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Delete checkpoints belonging to thread
+    
     cursor.execute("DELETE FROM checkpoints WHERE thread_id = ?", (thread_id,))
 
-    # If you have writes table (depends on version)
+   
     try:
         cursor.execute("DELETE FROM writes WHERE thread_id = ?", (thread_id,))
     except:

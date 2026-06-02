@@ -96,8 +96,7 @@ Integrated tools include:
                 │ Vector Database     │
                 │ FAISS               │
                 └──────────┬──────────┘
-                           │
-                           ▼
+                            +
                   User Query
                            │
                            ▼
@@ -144,14 +143,12 @@ Integrated tools include:
 ```text
 project/
 │
-├── langgraph_rag_backend.py
+├── rag_backend.py
 ├── streamlit_rag_frontend.py
 ├── requirements.txt
 ├── Dockerfile
 ├── .dockerignore
 ├── .gitignore
-├── .env
-├── chatbot.db
 └── README.md
 ```
 
@@ -204,25 +201,6 @@ Retrieved chunks are passed to the LLM through LangGraph workflows to generate g
 
 ---
 
-# 🧠 LangGraph Workflow
-
-```text
-START
-   │
-   ▼
-chat_node
-   │
-   ├── Tool Needed? ──► ToolNode
-   │                        │
-   │                        ▼
-   └────────────────── chat_node
-```
-
-The graph dynamically decides:
-- direct response
-- or tool execution
-
----
 
 # 🚀 Installation
 
@@ -288,24 +266,6 @@ http://localhost:8501
 
 ---
 
-# 🐳 Docker Setup
-
-## Build Docker Image
-
-```bash
-docker build -t rag-chatbot .
-```
-
----
-
-## Run Container
-
-```bash
-docker run -p 8501:8501 --env-file .env rag-chatbot
-```
-
----
-
 # 💡 Key Concepts Demonstrated
 
 - Retrieval-Augmented Generation (RAG)
@@ -330,13 +290,6 @@ It demonstrates:
 - Multi-tool orchestration
 - Persistent memory
 - Scalable conversational systems
-
-This project is highly relevant for:
-- LLM Engineering
-- AI Engineering
-- Generative AI
-- Applied NLP
-- Production AI Systems
 
 ---
 

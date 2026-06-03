@@ -152,8 +152,21 @@ def get_stock_price(symbol: str) -> dict:
         "https://www.alphavantage.co/query"
         f"?function=GLOBAL_QUOTE&symbol={symbol}&apikey=C9PE94QUEW9VWGFM"
     )
-    r = requests.get(url)
-    return r.json()
+
+     try:
+        r = requests.get(
+            url,
+            timeout=10
+        )
+
+        r.raise_for_status()
+
+        return r.json()
+
+    except requests.RequestException as e:
+        return {
+            "error": str(e)
+        }
 
 
 @tool

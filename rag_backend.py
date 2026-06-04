@@ -4,9 +4,7 @@ import os
 import sqlite3
 import tempfile
 from typing import Annotated, Any, Dict, Optional, TypedDict
-
 from dotenv import load_dotenv
-#from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.tools import DuckDuckGoSearchRun
@@ -25,8 +23,6 @@ load_dotenv()
 # -------------------
 # 1. LLM + embeddings
 # -------------------
-# llm = ChatOpenAI(model="gpt-4o-mini")
-# embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 llm = ChatOpenAI(
     model="openai/gpt-4o-mini",
@@ -262,11 +258,6 @@ def retrieve_all_threads():
         all_threads.add(checkpoint.config["configurable"]["thread_id"])
     return list(all_threads)
 
-
-
-
-
-import sqlite3
 
 def delete_thread_permanently(thread_id: str):
     checkpointer = chatbot.checkpointer
